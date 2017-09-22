@@ -11,7 +11,7 @@ class Place(models.Model):
     # audio = models
     rate = models.IntegerField()
     # comments =
-    photo = models.ImageField()
+    photo = models.ImageField(upload_to='media')
     latitude = models.CharField(max_length=20)
     longitude = models.CharField(max_length=20)
     cost = models.FloatField()
@@ -25,7 +25,6 @@ class Place(models.Model):
 
     def __str__(self):
         return self.name
-
 
     class Meta:
         verbose_name = 'Place'

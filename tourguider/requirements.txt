@@ -1,3 +1,8 @@
 Django==1.11.5
-pytz==2017.2
+factory-boy==2.9.2
+Faker==0.8.4
+olefile==0.44
 Pillow==4.2.1
+python-dateutil==2.6.1
+pytz==2017.2
+six==1.11.0
