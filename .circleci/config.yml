@@ -18,7 +18,8 @@ jobs:
     working_directory: ~/Tour-Guider/tourguider
 
     steps:
-      - checkout
+      - checkout:
+        path: ~/Tour-Guider
 
       # Download and cache dependencies
       - restore_cache:
