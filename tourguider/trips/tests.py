@@ -30,8 +30,8 @@ class TripFactory(DjangoModelFactory):
 
 class TripModelTest(TestCase):
     def test_create_model(self):
-        trip = TripFactory()
-        self.assertEqual("Trip 000", trip.name)
+        trip = TripFactory(name="Trip 001")
+        self.assertEqual("Trip 001", trip.name)
 
     def test_trip_places_amount(self):
         places = (PlaceFactory() for _ in range(10))
