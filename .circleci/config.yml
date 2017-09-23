@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - checkout:
-        path: ~/Tour-Guider
+          path: ~/Tour-Guider
 
       # Download and cache dependencies
       - restore_cache:
