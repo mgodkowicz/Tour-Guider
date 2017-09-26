@@ -39,8 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'graphene_django',
     'places',
-    'trips',
-    'hours'
+    'trips'
 ]
 
 MIDDLEWARE = [
