@@ -5,7 +5,7 @@ from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from apps.trips.schema import TripQuery
+from apps.trips.schema import TripQuery, TripMutation
 from apps.places.schema import PlaceQuery, PlaceMutation
 
 
@@ -21,12 +21,12 @@ class PrivateQuery(PlaceQuery, graphene.ObjectType):
     pass
 
 
-class Mutation(PlaceMutation, graphene.ObjectType):
+class Mutation(PlaceMutation, TripMutation, graphene.ObjectType):
     pass
 
 public_schema = graphene.Schema(query=PublicQuery, mutation=Mutation)
 
-private_schema = graphene.Schema(query=PrivateQuery)
+private_schema = graphene.Schema(query=PrivateQuery, mutation=Mutation)
 
 
 class DRFAuthenticatedGraphQLView(GraphQLView):

@@ -13,7 +13,7 @@ class Trip(models.Model):
     places = models.ManyToManyField(Place)
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(auto_now=True)
-    rate = models.IntegerField(blank=True)
+    rate = models.IntegerField(blank=True, null=True)
     # comments =
 
     @property
