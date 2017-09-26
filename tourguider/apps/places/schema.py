@@ -37,9 +37,7 @@ class PlaceQuery(graphene.AbstractType):
 
 
 class CreatePlace(graphene.Mutation):
-    id = graphene.ID()
-    name = graphene.String()
-    # duration = graphene.String(source="duration")
+    place = graphene.Field(PlaceType)
 
     class Input:
         name = graphene.String()
@@ -56,6 +54,7 @@ class CreatePlace(graphene.Mutation):
     def mutate(root, input, context, info):
         duration = timedelta(
             minutes=input.get('duration'))
+
         place = Place(
             name=input.get('name'),
             description=input.get('description'),
@@ -65,14 +64,11 @@ class CreatePlace(graphene.Mutation):
             address=input.get('address'),
             latitude=input.get('latitude', 0),
             longitude=input.get('longitude', 0),
-            cost=input.get('cost', False),
+            cost=input.get('cost', 0)
         )
         place.save()
 
-        return CreatePlace(
-            id=place.id,
-            name=place.name
-        )
+        return CreatePlace(place=place)
 
 
 class PlaceMutation(graphene.AbstractType):

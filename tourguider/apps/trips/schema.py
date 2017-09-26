@@ -45,3 +45,5 @@ class TripQuery(graphene.AbstractType):
             return Trip.objects.get(name=name)
 
         return None
+
+
