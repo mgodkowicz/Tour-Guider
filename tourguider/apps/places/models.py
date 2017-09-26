@@ -10,12 +10,12 @@ class Place(models.Model):
     city = models.CharField(max_length=100, blank=True)
     address = models.CharField(max_length=150, blank=True)
     # audio = models
-    rate = models.IntegerField()
+    rate = models.IntegerField(blank=True, null=True)
     # comments =
-    photo = models.ImageField(upload_to='media')
-    latitude = models.CharField(max_length=20)
-    longitude = models.CharField(max_length=20)
-    cost = models.FloatField()
+    photo = models.ImageField(blank=True, upload_to='media')
+    latitude = models.CharField(max_length=20, blank=True)
+    longitude = models.CharField(max_length=20, blank=True)
+    cost = models.FloatField(default=0)
     opening_time = models.TimeField(blank=True, null=True)
     closing_time = models.TimeField(blank=True, null=True)
     created = models.DateTimeField(default=timezone.now)

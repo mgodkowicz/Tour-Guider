@@ -1,3 +1,4 @@
+from datetime import timedelta
 import graphene
 from graphene_django import DjangoObjectType
 
@@ -33,3 +34,46 @@ class PlaceQuery(graphene.AbstractType):
             return Place.objects.get(name=name)
 
         return None
+
+
+class CreatePlace(graphene.Mutation):
+    id = graphene.ID()
+    name = graphene.String()
+    # duration = graphene.String(source="duration")
+
+    class Input:
+        name = graphene.String()
+        description = graphene.String()
+        guide = graphene.String()
+        duration = graphene.Int()
+        city = graphene.String()
+        address = graphene.String()
+        latitude = graphene.String()
+        longitude = graphene.String()
+        cost = graphene.Int()
+
+    @staticmethod
+    def mutate(root, input, context, info):
+        duration = timedelta(
+            minutes=input.get('duration'))
+        place = Place(
+            name=input.get('name'),
+            description=input.get('description'),
+            duration=duration,
+            guide=input.get('guide'),
+            city=input.get('city', 'Wrocław'),
+            address=input.get('address'),
+            latitude=input.get('latitude', 0),
+            longitude=input.get('longitude', 0),
+            cost=input.get('cost', False),
+        )
+        place.save()
+
+        return CreatePlace(
+            id=place.id,
+            name=place.name
+        )
+
+
+class PlaceMutation(graphene.AbstractType):
+    create_place = CreatePlace.Field()
