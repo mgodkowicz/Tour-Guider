@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.utils.timezone import timedelta
-from factory import Sequence
+from factory import Sequence, SubFactory
 from factory.django import DjangoModelFactory, ImageField
 
 
