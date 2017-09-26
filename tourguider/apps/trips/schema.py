@@ -1,17 +1,14 @@
 import graphene
 from graphene_django import DjangoObjectType
 
-from apps.places.models import Place
+from apps.places.schema import PlaceType
 from .models import Trip
-
-
-class PlaceType(DjangoObjectType):
-    class Meta:
-        model = Place
 
 
 class TripType(DjangoObjectType):
     places = graphene.List(PlaceType)
+    cost = graphene.Int(source="cost")
+    duration = graphene.String(source="duration")
 
     class Meta:
         model = Trip
@@ -21,7 +18,7 @@ class TripType(DjangoObjectType):
         return self.places.all()
 
 
-class Query(graphene.AbstractType):
+class TripQuery(graphene.AbstractType):
     trip = graphene.Field(TripType,
                           id=graphene.Int(),
                           name=graphene.String())
@@ -32,12 +29,11 @@ class Query(graphene.AbstractType):
                            id=graphene.Int(),
                            name=graphene.String())
 
+    @staticmethod
     def resolve_all_trips(self, args, context, info):
         return Trip.objects.all()
 
-    # def resolve_places(self, info, *args, **kwargs):
-    #     return Place.objects.all()
-
+    @staticmethod
     def resolve_trip(self, args, context, info):
         id = args.get('id')
         name = args.get('name')
@@ -47,17 +43,5 @@ class Query(graphene.AbstractType):
 
         if name is not None:
             return Trip.objects.get(name=name)
-
-        return None
-
-    def resolve_place(self, args, context, info):
-        id = args.get('id')
-        name = args.get('name')
-
-        if id is not None:
-            return Place.objects.get(pk=id)
-
-        if name is not None:
-            return Place.objects.get(name=name)
 
         return None
