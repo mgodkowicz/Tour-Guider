@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'graphene_django',
     'places',
     'trips'
 ]
@@ -68,6 +69,10 @@ TEMPLATES = [
         },
     },
 ]
+
+GRAPHENE = {
+    'SCHEMA': 'schema.schema'
+}
 
 WSGI_APPLICATION = 'tourguider.wsgi.application'
 
