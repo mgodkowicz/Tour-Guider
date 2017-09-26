@@ -1,31 +1,8 @@
 from django.test import TestCase
 from django.utils.timezone import timedelta
-from factory import Sequence, SubFactory, post_generation
-from factory.django import DjangoModelFactory, ImageField
 
-from .models import Trip
-from places.tests import PlaceFactory
-
-
-class TripFactory(DjangoModelFactory):
-    class Meta:
-        model = Trip
-
-    name = Sequence(lambda n: "Trip %03d" % n)
-    description = "description"
-    rate = 5
-    places = SubFactory(PlaceFactory)
-
-    @post_generation
-    def places(self, create, extracted, **kwargs):
-        if not create:
-            # Simple build, do nothing.
-            return
-
-        if extracted:
-            # A list of groups were passed in, use them
-            for place in extracted:
-                self.places.add(place)
+from apps.places.tests.factories import PlaceFactory
+from .factories import TripFactory
 
 
 class TripModelTest(TestCase):

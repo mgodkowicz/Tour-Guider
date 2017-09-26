@@ -3,7 +3,7 @@ import datetime
 from django.db import models
 from django.utils import timezone
 
-from places.models import Place
+from apps.places.models import Place
 # Create your models here.
 
 

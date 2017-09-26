@@ -1,9 +1,8 @@
 import graphene
-
 from graphene_django import DjangoObjectType
 
+from apps.places.models import Place
 from .models import Trip
-from places.models import Place
 
 
 class PlaceType(DjangoObjectType):

@@ -30,7 +30,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+PREREQ_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,9 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'graphene_django',
-    'places',
-    'trips'
+
 ]
+
+PROJECT_APPS = [
+    'apps.places',
+    'apps.trips'
+]
+
+INSTALLED_APPS = PREREQ_APPS + PROJECT_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -71,7 +77,7 @@ TEMPLATES = [
 ]
 
 GRAPHENE = {
-    'SCHEMA': 'schema.schema'
+    'SCHEMA': 'tourguider.schema.schema'
 }
 
 WSGI_APPLICATION = 'tourguider.wsgi.application'

@@ -1,6 +1,6 @@
 import graphene
 
-from trips.schema import Query
+from apps.trips.schema import Query
 
 
 class Query(Query, graphene.ObjectType):

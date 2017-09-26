@@ -8,6 +8,10 @@ __pycache__/
 
 .idea
 
+# Testing image files
+media/tests/*
+
+
 # Distribution / packaging
 .Python
 env/

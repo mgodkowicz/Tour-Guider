@@ -7,6 +7,8 @@ class Place(models.Model):
     description = models.TextField()
     guide = models.TextField()
     duration = models.DurationField()
+    city = models.CharField(max_length=100, blank=True)
+    address = models.CharField(max_length=150, blank=True)
     # audio = models
     rate = models.IntegerField()
     # comments =
