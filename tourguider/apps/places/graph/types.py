@@ -32,7 +32,6 @@ class GuideType(DjangoObjectType):
 class PlaceInput(graphene.InputObjectType):
     name = graphene.String()
     description = graphene.String()
-    #   guide = graphene.String()
     duration = graphene.Int()
     city = graphene.String()
     address = graphene.String()
@@ -46,3 +45,4 @@ class GuideInput(graphene.InputObjectType):
     duration = graphene.Int()
     audioURL = graphene.String()
     place = graphene.Int()
+    text = graphene.String()

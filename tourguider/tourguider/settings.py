@@ -42,6 +42,8 @@ PREREQ_APPS = [
 
 ]
 
+TEST_RUNNER = 'snapshottest.django.TestRunner'
+
 PROJECT_APPS = [
     'apps.places',
     'apps.trips',

@@ -69,8 +69,7 @@ class Place(models.Model):
 
 class Guide(models.Model):
     name = models.CharField(max_length=200)
+    text = models.TextField()
     audioURL = models.URLField()
     duration = models.DurationField()
     place = models.ForeignKey(Place, related_name='guides')
-
-

@@ -24,16 +24,18 @@ class CreatePlace(graphene.Mutation):
         place_data['duration'] = duration
         place = Place(**place_data)
         place.save()
-
-        duration = timedelta(
-            minutes=guide_data.get('duration', 0))
-        guide = Guide(
-            name=guide_data.get('name'),
-            duration=duration,
-            audioURL=guide_data.get('audioURL'),
-            place=place
-        )
-        guide.save()
+        guide = None
+        if guide_data:
+            duration = timedelta(
+                minutes=guide_data.get('duration', 0))
+            guide = Guide(
+                name=guide_data.get('name'),
+                text=guide_data.get('text'),
+                duration=duration,
+                audioURL=guide_data.get('audioURL'),
+                place=place
+            )
+            guide.save()
 
         return CreatePlace(place=place, guide=guide)
 
