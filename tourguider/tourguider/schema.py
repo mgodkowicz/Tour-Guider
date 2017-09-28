@@ -1,18 +1,19 @@
 import graphene
-from graphene_django.views import GraphQLView
 import rest_framework
+from graphene_django.debug import DjangoDebug
+from graphene_django.views import GraphQLView
 from rest_framework.decorators import authentication_classes, permission_classes, api_view
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from apps.trips.schema import TripQuery, TripMutation
 from apps.places.schema import PlaceQuery, PlaceMutation
+from apps.trips.schema import TripQuery, TripMutation
 
 
 class PublicQuery(TripQuery, PlaceQuery, graphene.ObjectType):
     # This class will inherit from multiple Queries
     # as we begin to add more apps to our project
-    pass
+    debug = graphene.Field(DjangoDebug, name='__debug')
 
 
 class PrivateQuery(PlaceQuery, graphene.ObjectType):

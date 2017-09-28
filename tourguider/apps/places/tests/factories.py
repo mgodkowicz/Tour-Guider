@@ -11,7 +11,7 @@ class PlaceFactory(DjangoModelFactory):
 
     name = Sequence(lambda n: "Place %03d" % n)
     description = "description"
-    guide = "guide"
+   # guide = "guide"
     duration = timedelta(minutes=30)
     rate = 4
  #   photo = ImageField(filename="tests/TestingImageFile.jpg")
