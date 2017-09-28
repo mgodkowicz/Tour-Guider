@@ -16,7 +16,6 @@ class PlaceType(DjangoObjectType):
     class Meta:
         model = Place
 
-    @graphene.resolve_only_args
     def resolve_reviews(self):
         return Review.objects.filter(
             content_type=ContentType.objects.get_for_model(Place), object_id=self.id)

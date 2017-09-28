@@ -3,9 +3,9 @@ djangorestframework==3.6.4
 djangorestframework-jwt==1.11.0
 factory-boy==2.9.2
 Faker==0.8.4
-graphene==1.4.1
-graphene-django==1.3
-graphql-core==1.1
+graphene==2.0.dev20170802065539
+graphene-django==2.0.dev2017083101
+graphql-core==2.0.dev20170801051721
 graphql-relay==0.4.5
 iso8601==0.1.12
 olefile==0.44

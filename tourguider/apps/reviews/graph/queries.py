@@ -5,20 +5,20 @@ from .types import ReviewType
 from ..models import Review
 
 
-class ReviewQuery(graphene.AbstractType):
+class ReviewQuery:
     all_reviews = graphene.List(ReviewType)
     review = graphene.Field(ReviewType,
                             id=graphene.Int(),
                             title=graphene.String())
 
     @staticmethod
-    def resolve_all_reviews(self, args, context, info):
+    def resolve_all_reviews(self, info, **kwargs):
         return Review.objects.all()
 
     @staticmethod
-    def resolve_review(self, args, context, info):
-        id = args.get('id')
-        title = args.get('title')
+    def resolve_review(self, info, **kwargs):
+        id = kwargs.get('id')
+        title = kwargs.get('title')
 
         if id is not None:
             return Review.objects.get(pk=id)

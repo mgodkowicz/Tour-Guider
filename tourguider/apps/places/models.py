@@ -73,3 +73,9 @@ class Guide(models.Model):
     audioURL = models.URLField()
     duration = models.DurationField()
     place = models.ForeignKey(Place, related_name='guides')
+
+    def __unicode__(self):
+        return self.name
+
+    def __str__(self):
+        return self.name

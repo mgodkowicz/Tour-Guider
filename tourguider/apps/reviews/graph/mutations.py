@@ -13,16 +13,16 @@ class CreateTripReview(graphene.Mutation):
     review = graphene.Field(ReviewType)
     trip = graphene.Field(TripType)
 
-    class Input:
+    class Arguments:
         review_data = ReviewInputType()
 
     @staticmethod
-    def mutate(root, input, context, info):
-        review_data = input.get('review_data')
+    def mutate(root, info, **kwargs):
+        review_data = kwargs.get('review_data')
         trip = Trip.objects.get(id=review_data.get('object_id'))
         review = Review.objects.create(
             content_type=ContentType.objects.get_for_model(Trip),
-            user=context.user,
+            user=info.context.user,
             **review_data
         )
 
@@ -33,23 +33,23 @@ class CreatePlaceReview(graphene.Mutation):
     review = graphene.Field(ReviewType)
     place = graphene.Field(PlaceType)
 
-    class Input:
+    class Arguments:
         review_data = ReviewInputType()
 
     @staticmethod
-    def mutate(root, input, context, info):
-        review_data = input.get('review_data')
+    def mutate(root, info, **kwargs):
+        review_data = kwargs.get('review_data')
         place = Place.objects.get(id=review_data.get('object_id'))
         review = Review.objects.create(
             content_type=ContentType.objects.get_for_model(Place),
-            user=context.user,
+            user=info.context.user,
             **review_data
         )
 
         return CreatePlaceReview(review=review, place=place)
 
 
-class ReviewMutation(graphene.AbstractType):
+class ReviewMutation:
     create_trip_review = CreateTripReview.Field()
     create_place_review = CreatePlaceReview.Field()
 

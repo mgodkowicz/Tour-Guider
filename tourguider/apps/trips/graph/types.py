@@ -18,10 +18,8 @@ class TripType(DjangoObjectType):
     class Meta:
         model = Trip
 
-    @graphene.resolve_only_args
     def resolve_places(self):
         return self.places.all()
 
-    @graphene.resolve_only_args
     def resolve_reviews(self):
         return Review.objects.filter(content_type=ContentType.objects.get_for_model(Trip), object_id=self.id)

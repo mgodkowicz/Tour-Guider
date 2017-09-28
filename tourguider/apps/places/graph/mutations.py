@@ -10,14 +10,14 @@ class CreatePlace(graphene.Mutation):
     place = graphene.Field(PlaceType)
     guide = graphene.Field(GuideType)
 
-    class Input:
+    class Arguments:
         place_data = PlaceInput(required=True)
         guide_data = GuideInput()
 
     @staticmethod
-    def mutate(root, input, context, info):
-        place_data = input.get('place_data')
-        guide_data = input.get('guide_data')
+    def mutate(root, info, **kwargs):
+        place_data = kwargs.get('place_data')
+        guide_data = kwargs.get('guide_data')
 
         duration = timedelta(
             minutes=place_data.get('duration', 0))
@@ -40,7 +40,7 @@ class CreatePlace(graphene.Mutation):
         return CreatePlace(place=place, guide=guide)
 
 
-class PlaceMutation(graphene.AbstractType):
+class PlaceMutation:
     create_place = CreatePlace.Field()
 
 
