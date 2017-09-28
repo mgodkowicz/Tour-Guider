@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from graphene_django.views import GraphQLView
-from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
 
 from .schema import DRFAuthenticatedGraphQLView, private_schema, public_schema
 
@@ -27,6 +27,6 @@ urlpatterns = [
     url(r'^graphql-priv/', DRFAuthenticatedGraphQLView.as_view(
                                                 graphiql=True,
                                                 schema=private_schema)),
-    url(r'^api-token-auth/', obtain_jwt_token)
-
+    url(r'^api-token-auth/', obtain_jwt_token),
+    url(r'^api-token-verify/', verify_jwt_token)
 ]

@@ -8,9 +8,10 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from apps.places.schema import PlaceQuery, PlaceMutation
 from apps.trips.schema import TripQuery, TripMutation
+from apps.users.schema import UserMutation, UserQuery
 
 
-class PublicQuery(TripQuery, PlaceQuery, graphene.ObjectType):
+class PublicQuery(TripQuery, PlaceQuery, UserQuery, graphene.ObjectType):
     # This class will inherit from multiple Queries
     # as we begin to add more apps to our project
     debug = graphene.Field(DjangoDebug, name='__debug')
@@ -22,7 +23,7 @@ class PrivateQuery(PlaceQuery, graphene.ObjectType):
     pass
 
 
-class Mutation(PlaceMutation, TripMutation, graphene.ObjectType):
+class Mutation(PlaceMutation, TripMutation, UserMutation, graphene.ObjectType):
     pass
 
 public_schema = graphene.Schema(query=PublicQuery, mutation=Mutation)
