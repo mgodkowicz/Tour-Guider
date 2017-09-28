@@ -10,7 +10,8 @@ from apps.trips.models import Trip
 
 class TripType(DjangoObjectType):
     places = graphene.List(PlaceType)
-    cost = graphene.Int(source="cost")
+    cost = graphene.Float(source="cost")
+    rate = graphene.Float(source="rate")
     duration = graphene.String(source="duration")
     reviews = graphene.List(ReviewType)
 

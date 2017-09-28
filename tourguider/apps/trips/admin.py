@@ -4,7 +4,7 @@ from .models import Trip
 
 
 class TripsAdmin(admin.ModelAdmin):
-    readonly_fields = ('duration', 'cost')
+    readonly_fields = ('duration', 'cost', 'rate')
 
     class Meta:
         model = Trip

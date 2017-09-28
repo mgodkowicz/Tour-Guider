@@ -11,7 +11,6 @@ class TripFactory(DjangoModelFactory):
 
     name = Sequence(lambda n: "Trip %03d" % n)
     description = "description"
-    rate = 5
     places = SubFactory(PlaceFactory)
 
     @post_generation

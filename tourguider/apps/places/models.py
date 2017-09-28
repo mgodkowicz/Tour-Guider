@@ -1,5 +1,8 @@
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils import timezone
+
+from apps.reviews.models import Review
 
 
 class OpeningHour(models.Model):
@@ -35,7 +38,6 @@ class Place(models.Model):
     duration = models.DurationField()
     city = models.CharField(max_length=100, blank=True)
     address = models.CharField(max_length=150, blank=True)
-    rate = models.IntegerField(blank=True, null=True)
     photo = models.ImageField(blank=True, upload_to='media')
     latitude = models.CharField(max_length=20, blank=True)
     longitude = models.CharField(max_length=20, blank=True)
@@ -51,6 +53,14 @@ class Place(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def rate(self):
+        reviews = Review.objects.filter(
+            content_type=ContentType.objects.get_for_model(Place), object_id=self.id)
+        if len(reviews):
+            return sum(review.rate for review in reviews) / len(reviews)
+        return 0
 
     class Meta:
         verbose_name = 'Place'

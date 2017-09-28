@@ -1,10 +1,11 @@
 import datetime
 
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils import timezone
 
 from apps.places.models import Place
-# Create your models here.
+from apps.reviews.models import Review
 
 
 class Trip(models.Model):
@@ -13,8 +14,6 @@ class Trip(models.Model):
     places = models.ManyToManyField(Place)
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(auto_now=True)
-    rate = models.IntegerField(blank=True, null=True)
-    # comments =
 
     @property
     def duration(self):
@@ -23,6 +22,14 @@ class Trip(models.Model):
     @property
     def cost(self):
         return sum((place.cost for place in self.places.all()))
+
+    @property
+    def rate(self):
+        reviews = Review.objects.filter(
+            content_type=ContentType.objects.get_for_model(Trip), object_id=self.id)
+        if len(reviews):
+            return sum(review.rate for review in reviews) / len(reviews)
+        return 0
 
     def __unicode__(self):
         return self.name

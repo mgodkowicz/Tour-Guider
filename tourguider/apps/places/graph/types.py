@@ -10,6 +10,7 @@ from apps.trips.models import Trip
 
 class PlaceType(DjangoObjectType):
     duration = graphene.String(source="duration")
+    rate = graphene.Float(source="rate")
     reviews = graphene.List(ReviewType)
 
     class Meta:
