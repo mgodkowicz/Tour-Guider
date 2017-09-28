@@ -44,7 +44,9 @@ PREREQ_APPS = [
 
 PROJECT_APPS = [
     'apps.places',
-    'apps.trips'
+    'apps.trips',
+    'apps.users',
+    'apps.reviews'
 ]
 
 INSTALLED_APPS = PREREQ_APPS + PROJECT_APPS
