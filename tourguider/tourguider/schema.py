@@ -17,7 +17,7 @@ class PublicQuery(TripQuery, PlaceQuery, UserQuery, graphene.ObjectType):
     debug = graphene.Field(DjangoDebug, name='__debug')
 
 
-class PrivateQuery(PlaceQuery, graphene.ObjectType):
+class PrivateQuery(PlaceQuery, UserQuery, graphene.ObjectType):
     # This class will inherit from multiple Queries
     # as we begin to add more apps to our project
     pass
