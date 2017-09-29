@@ -18,7 +18,7 @@ class TripQuery:
 
     @staticmethod
     def resolve_all_trips(self, info, **kwargs):
-        return Trip.objects.all() # select_related('reviews').all()
+        return Trip.objects.all()
 
     @staticmethod
     def resolve_trip(self, info, **kwargs):

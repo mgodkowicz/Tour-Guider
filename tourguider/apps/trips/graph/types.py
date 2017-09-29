@@ -18,8 +18,10 @@ class TripType(DjangoObjectType):
     class Meta:
         model = Trip
 
-    def resolve_places(self):
+    def resolve_places(self, *args):
         return self.places.all()
 
-    def resolve_reviews(self):
-        return Review.objects.filter(content_type=ContentType.objects.get_for_model(Trip), object_id=self.id)
+    def resolve_reviews(self, *args):
+        return Review.objects.filter(
+            content_type=ContentType.objects.get_for_model(Trip),
+            object_id=self.id)
