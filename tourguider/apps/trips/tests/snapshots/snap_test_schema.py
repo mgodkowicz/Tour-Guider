@@ -66,7 +66,7 @@ snapshots['TripSchemaTest::test_get_all_trips 1'] = {
         'allTrips': [
             {
                 'description': 'description',
-                'name': 'Trip 002',
+                'name': 'Wycieczka po rynku',
                 'places': [
                     {
                         'name': '0'
@@ -108,7 +108,7 @@ snapshots['TripSchemaTest::test_get_trip_with_reviews 1'] = {
     'data': {
         'trip': {
             'description': 'description',
-            'name': 'Trip 003',
+            'name': 'Wycieczka po rynku',
             'places': [
                 {
                     'name': '0'
@@ -144,7 +144,7 @@ snapshots['TripSchemaTest::test_get_trip_with_reviews 1'] = {
             'reviews': [
                 {
                     'rate': 5,
-                    'title': 'Trip 003'
+                    'title': 'Trip 005'
                 }
             ]
         }

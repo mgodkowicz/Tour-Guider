@@ -20,13 +20,15 @@ class CreateTripReview(graphene.Mutation):
     def mutate(root, info, **kwargs):
         review_data = kwargs.get('review_data')
         trip = Trip.objects.get(id=review_data.get('object_id'))
-        review = Review.objects.create(
-            content_type=ContentType.objects.get_for_model(Trip),
-            user=info.context.user,
-            **review_data
-        )
+        if info.context.user:
+            review = Review.objects.create(
+                content_type=ContentType.objects.get_for_model(Trip),
+                user=info.context.user,
+                **review_data
+            )
 
-        return CreateTripReview(review=review, trip=trip)
+            return CreateTripReview(review=review, trip=trip)
+        return None
 
 
 class CreatePlaceReview(graphene.Mutation):

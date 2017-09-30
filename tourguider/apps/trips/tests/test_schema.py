@@ -11,7 +11,7 @@ from ..models import Trip
 class TripSchemaTest(TestCase):
     def setUp(self):
         places = (PlaceFactory(name=place) for place in range(10))
-        trip = TripFactory.create(places=places)
+        trip = TripFactory.create(places=places, name="Wycieczka po rynku")
         ReviewFactory.create(
             content_type=ContentType.objects.get_for_model(Trip), object_id=trip.id)
         self.client = Client(public_schema)

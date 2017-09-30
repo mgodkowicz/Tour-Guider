@@ -19,7 +19,7 @@ class UserQuery:
                           id=graphene.Int(),
                           username=graphene.String())
 
-    def resolve_all_users(self):
+    def resolve_all_users(self, *args):
         return User.objects.all()
 
     @staticmethod
