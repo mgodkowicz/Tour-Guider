@@ -1,6 +1,8 @@
 import graphene
+from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-from graphene_django import DjangoObjectType
+#from graphene_django import DjangoObjectType
+from graphene_django_extras import DjangoObjectType, DjangoListObjectType
 
 from apps.places.models import Place, Guide
 from apps.reviews.graph.types import ReviewType
@@ -28,15 +30,41 @@ class GuideType(DjangoObjectType):
         model = Guide
 
 
-class PlaceInput(graphene.InputObjectType):
-    name = graphene.String()
-    description = graphene.String()
-    duration = graphene.Int()
-    city = graphene.String()
-    address = graphene.String()
-    latitude = graphene.String()
-    longitude = graphene.String()
-    cost = graphene.Int()
+# class PlaceInput(graphene.InputObjectType):
+#     id = graphene.Int(required=False)
+#     name = graphene.String()
+#     description = graphene.String()
+#     duration = graphene.Int()
+#     city = graphene.String()
+#     address = graphene.String()
+#     latitude = graphene.String()
+#     longitude = graphene.String()
+#     cost = graphene.Int()
+#
+#
+# class PlaceEditInput(graphene.InputObjectType):
+#     id = graphene.Int()
+#     name = graphene.String(required=False)
+#     description = graphene.String(required=False)
+#     duration = graphene.Int(required=False)
+#     city = graphene.String(required=False)
+#     address = graphene.String(required=False)
+#     latitude = graphene.String(required=False)
+#     longitude = graphene.String(required=False)
+#     cost = graphene.Int(required=False)
+
+from graphene_django_extras import DjangoInputObjectType
+
+
+# class PlaceInput(DjangoInputObjectType):
+#     class Meta:
+#         description = " Place Input Type for used as input on Arguments classes on traditional Mutations "
+#         model = Place
+#
+# class GuideInput(DjangoInputObjectType):
+#     class Meta:
+#         description = " Place Input Type for used as input on Arguments classes on traditional Mutations "
+#         model = Guide
 
 
 class GuideInput(graphene.InputObjectType):

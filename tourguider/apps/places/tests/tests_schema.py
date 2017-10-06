@@ -1,10 +1,15 @@
 # from django.test import TestCase
+from django.contrib.auth.models import User
 from snapshottest.django import TestCase
+
+from apps.places.models import Place
 from .factories import PlaceFactory
 from graphene.test import Client
 from tourguider.schema import public_schema
+from unittest import skip
 
 
+@skip('Aborting graphql implemenatation')
 class PlaceSchemaTest(TestCase):
     def setUp(self):
         PlaceFactory(name="Place")
@@ -39,15 +44,18 @@ class PlaceSchemaTest(TestCase):
     def test_create_place_without_guide(self):
         schema = '''
         mutation{
-            createPlace(placeData: {name: "NewPlace",
-                        description: "description",
-                        duration: 5, city: "Wrocław",
-                        address: "Plac", cost: 15}){
+          createPlace(newPlace: {
+            name: "New Place",
+            description: "Awesome Place",
+            duration: 50,
+            cost: 5,
+            city: "Wrocław"
+          }){
+            ok
             place{
+              id
               name
-              description
               duration
-              city
             }
           }
         }
@@ -79,3 +87,36 @@ class PlaceSchemaTest(TestCase):
               }
             }'''
         self.assertMatchSnapshot(self.client.execute(schema))
+
+    def test_edit_place(self):
+        schema = '''
+        mutation {
+          editPlace(newPlace: {id: 1, name: "Edited name 2"}) {
+            ok
+            place{
+              name
+              id
+            }
+          }
+        }
+
+        '''
+        self.assertMatchSnapshot(self.client.execute(schema))
+
+    def test_delete_place(self):
+        schema = '''
+        mutation {
+          deletePlace(id: 1){
+            ok
+            place{
+              name
+            }
+          }
+        }
+        '''
+        amount_places = len(Place.objects.all())
+        self.assertMatchSnapshot(
+            self.client.execute(schema, context_value={'user': User(id='1', username='Syrus')})
+        )
+        new_amount = len(Place.objects.all())
+        self.assertEqual(amount_places-1, new_amount)

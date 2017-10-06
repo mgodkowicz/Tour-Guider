@@ -19,7 +19,7 @@ class OpeningHour(models.Model):
     weekday = models.IntegerField(choices=WEEKDAYS)
     opening_hour = models.TimeField(blank=True, null=True)
     closing_hour = models.TimeField(blank=True, null=True)
-   # open_all_day = models.BooleanField(blank=True)
+    # open_all_day = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('weekday', 'opening_hour')

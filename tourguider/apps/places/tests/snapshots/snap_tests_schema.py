@@ -10,35 +10,66 @@ snapshots = Snapshot()
 snapshots['PlaceSchemaTest::test_create_place_without_guide 1'] = {
     'data': {
         'createPlace': {
+            'ok': True,
             'place': {
-                'city': 'Wrocław',
-                'description': 'description',
-                'duration': '0:05:00',
-                'name': 'NewPlace'
+                'duration': '0:00:50',
+                'id': '2',
+                'name': 'New Place'
             }
         }
     }
 }
 
 snapshots['PlaceSchemaTest::test_create_place_with_guide 1'] = {
+    'errors': [
+        {
+            'locations': [
+                {
+                    'column': 25,
+                    'line': 2
+                }
+            ],
+            'message': 'Unknown argument "placeData" on field "createPlace" of type "Mutation".'
+        },
+        {
+            'locations': [
+                {
+                    'column': 15,
+                    'line': 6
+                }
+            ],
+            'message': 'Unknown argument "guideData" on field "createPlace" of type "Mutation".'
+        },
+        {
+            'locations': [
+                {
+                    'column': 13,
+                    'line': 2
+                }
+            ],
+            'message': 'Field "createPlace" argument "newPlace" of type "PlaceCreateInput!" is required but not provided.'
+        }
+    ]
+}
+
+snapshots['PlaceSchemaTest::test_edit_place 1'] = {
     'data': {
-        'createPlace': {
+        'editPlace': {
+            'ok': True,
             'place': {
-                'city': 'Wrocław',
-                'cost': 15.0,
-                'description': 'description',
-                'duration': '0:05:00',
-                'guides': [
-                    {
-                        'duration': '0:10:00',
-                        'name': 'Guide',
-                        'place': {
-                            'name': 'NewPlace'
-                        },
-                        'text': 'guidetext'
-                    }
-                ],
-                'name': 'NewPlace'
+                'id': '1',
+                'name': 'Edited name 2'
+            }
+        }
+    }
+}
+
+snapshots['PlaceSchemaTest::test_delete_place 1'] = {
+    'data': {
+        'deletePlace': {
+            'ok': True,
+            'place': {
+                'name': 'Place'
             }
         }
     }

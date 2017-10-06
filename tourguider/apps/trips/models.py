@@ -11,7 +11,7 @@ from apps.reviews.models import Review
 class Trip(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField()
-    places = models.ManyToManyField(Place)
+    places = models.ManyToManyField(Place, blank=True)
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(auto_now=True)
 

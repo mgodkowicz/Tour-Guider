@@ -11,15 +11,20 @@ from .factories import ReviewFactory
 from apps.reviews.tests.factories import ReviewFactory
 
 
+class FakeAuth:
+    def __init__(self, user):
+        self.user = User.objects.create(
+            username=user, email=f"{user}@gmail.com")
+
+
 class TripSchemaTest(TestCase):
     def setUp(self):
         trip = TripFactory.create()
         place = PlaceFactory.create()
         ReviewFactory.create(
             content_type=ContentType.objects.get_for_model(Trip), object_id=trip.id)
-        User.objects.create_user(
+        user = User.objects.create_user(
             username='TestUser', password='12345678')
-
         self.client = Client(public_schema)
 
     def test_get_all_reviews(self):
@@ -46,19 +51,40 @@ class TripSchemaTest(TestCase):
         '''
         self.assertMatchSnapshot(self.client.execute(schema))
 
-    # def test_create_trip_review(self):
-    #
-    #     schema = '''
-    #     mutation{
-    #         createPlaceReview(reviewData: {title: "1st review", content: "content", rate: 5, objectId: 1}){
-    #         review{
-    #           title
-    #           content
-    #         }
-    #         place{
-    #           name
-    #           rate
-    #         }
-    #       }
-    #     }
-    #     '''
+    def test_create_trip_review(self):
+        schema = '''
+        mutation{
+          createTripReview(reviewData: {content: "good", rate: 5, objectId: 1}){
+            trip{
+              name
+            }
+            review{
+              content
+              user {
+                id
+                username
+              }
+            }
+          }
+        }
+        '''
+        self.assertMatchSnapshot(self.client.execute(schema, context_value=FakeAuth('Peter')))
+
+    def test_create_place_review(self):
+        schema = '''
+        mutation{
+          createPlaceReview(reviewData: {content: "good", rate: 5, objectId: 1}){
+            place{
+              name
+            }
+            review{
+              content
+              user {
+                id
+                username
+              }
+            }
+          }
+        }
+        '''
+        self.assertMatchSnapshot(self.client.execute(schema, context_value=FakeAuth('Peter')))

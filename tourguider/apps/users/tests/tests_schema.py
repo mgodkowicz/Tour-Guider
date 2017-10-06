@@ -56,14 +56,3 @@ class TripSchemaTest(TestCase):
           }
         }'''
         self.assertMatchSnapshot(self.client.execute(schema))
-
-    def test_invalid_login(self):
-        schema = '''
-        mutation{
-            login(username: "TestUser", password: "wrongpassword"){
-            user{
-              username
-            }
-          }
-        }'''
-        self.assertMatchSnapshot(self.client.execute(schema))

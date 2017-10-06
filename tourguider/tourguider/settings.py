@@ -38,11 +38,10 @@ PREREQ_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'graphene_django',
-    'rest_framework'
-
+    'rest_framework',
+    'rest_framework_docs'
 ]
 
-TEST_RUNNER = 'snapshottest.django.TestRunner'
 
 PROJECT_APPS = [
     'apps.places',
@@ -52,6 +51,8 @@ PROJECT_APPS = [
 ]
 
 INSTALLED_APPS = PREREQ_APPS + PROJECT_APPS
+
+TEST_RUNNER = 'snapshottest.django.TestRunner'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -93,7 +94,7 @@ REST_FRAMEWORK = {
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
-    ),
+    )
 }
 
 JWT_AUTH = {

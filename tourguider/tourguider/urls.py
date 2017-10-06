@@ -18,15 +18,17 @@ from django.contrib import admin
 from graphene_django.views import GraphQLView
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
 
-from .schema import DRFAuthenticatedGraphQLView, private_schema, public_schema
+from .schema import public_schema
 
 
 urlpatterns = [
+    url(r'^api/token-auth/', obtain_jwt_token),
+    url(r'^api/token-verify/', verify_jwt_token),
     url(r'^admin/', admin.site.urls),
     url(r'^graphql/', GraphQLView.as_view(graphiql=True, schema=public_schema)),
-    url(r'^graphql-priv/', DRFAuthenticatedGraphQLView.as_view(
-                                                graphiql=True,
-                                                schema=private_schema)),
-    url(r'^api-token-auth/', obtain_jwt_token),
-    url(r'^api-token-verify/', verify_jwt_token)
+
+
+    url(r'^api/trips/', include('apps.trips.api.urls', namespace='trips-api')),
+
+    url(r'^api/docs/', include('rest_framework_docs.urls')),
 ]

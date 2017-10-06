@@ -1,6 +1,6 @@
 import graphene
 
-from apps.places.models import Place
+from apps.places.models import Place, OpeningHour
 from .types import PlaceType
 
 

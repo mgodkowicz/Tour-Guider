@@ -144,7 +144,7 @@ snapshots['TripSchemaTest::test_get_trip_with_reviews 1'] = {
             'reviews': [
                 {
                     'rate': 5,
-                    'title': 'Trip 005'
+                    'title': 'Trip 007'
                 }
             ]
         }
