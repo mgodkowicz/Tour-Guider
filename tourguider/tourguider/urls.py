@@ -28,7 +28,7 @@ urlpatterns = [
     url(r'^graphql/', GraphQLView.as_view(graphiql=True, schema=public_schema)),
 
 
-    url(r'^api/trips/', include('apps.trips.api.urls', namespace='trips-api')),
+    url(r'^api/trips/', include('apps.trips.api.urls', namespace='api-trip')),
 
     url(r'^api/docs/', include('rest_framework_docs.urls')),
 ]

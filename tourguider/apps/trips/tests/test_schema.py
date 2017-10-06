@@ -1,3 +1,5 @@
+from unittest import skip
+
 from django.contrib.contenttypes.models import ContentType
 from snapshottest.django import TestCase
 from graphene.test import Client
@@ -7,7 +9,7 @@ from .factories import TripFactory, PlaceFactory
 from apps.reviews.tests.factories import ReviewFactory
 from ..models import Trip
 
-
+@skip('Aborting graphql implemenatation')
 class TripSchemaTest(TestCase):
     def setUp(self):
         places = (PlaceFactory(name=place) for place in range(10))

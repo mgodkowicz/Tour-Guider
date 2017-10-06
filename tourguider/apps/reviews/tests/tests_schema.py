@@ -1,3 +1,5 @@
+from unittest import skip
+
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
@@ -16,7 +18,7 @@ class FakeAuth:
         self.user = User.objects.create(
             username=user, email=f"{user}@gmail.com")
 
-
+@skip('Aborting graphql implemenatation')
 class TripSchemaTest(TestCase):
     def setUp(self):
         trip = TripFactory.create()

@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from factory import Sequence, SubFactory, post_generation
 from factory.django import DjangoModelFactory
 
@@ -9,6 +10,7 @@ class TripFactory(DjangoModelFactory):
     class Meta:
         model = Trip
 
+    author = Sequence(lambda n: User.objects.create(username=f"nerd{n}"))
     name = Sequence(lambda n: "Trip %03d" % n)
     description = "description"
     places = SubFactory(PlaceFactory)
