@@ -25,8 +25,14 @@ class PlaceOpeningHoursAPIView(generics.ListCreateAPIView):
     permission_classes = (IsAdminOrReadOnly,)
 
     def get_queryset(self):
-        places = Place.objects.get(id=self.kwargs['pk'])
-        return places.hours
+        place = Place.objects.get(id=self.kwargs['pk'])
+        return place.hours
+
+    def perform_create(self, serializer):
+        place = Place.objects.get(id=self.kwargs['pk'])
+        serializer.save(
+            place=self.kwargs['pk']
+        )
 
 
 class TripPlacesAPIView(generics.ListAPIView):

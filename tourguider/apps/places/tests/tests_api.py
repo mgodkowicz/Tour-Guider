@@ -210,6 +210,8 @@ class CreatePlaceOpeningHourTest(APITestCase):
             reverse('api-place:hours', kwargs={'pk': self.place.id}),
             data=self.valid_payload
         )
+        hour = OpeningHour.objects.get(id=response.data['id'])
+        self.assertTrue(hour.place_set.filter(id=self.place.id).exists())
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_invalid_hour_by_admin(self):
