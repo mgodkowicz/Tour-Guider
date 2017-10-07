@@ -1,4 +1,5 @@
-from django.utils.timezone import timedelta
+from django.utils.timezone import timedelta, datetime
+import datetime
 from factory import Sequence
 from factory.django import DjangoModelFactory, ImageField
 
@@ -26,3 +27,12 @@ class GuideFactory(DjangoModelFactory):
     audioURL = "www.example.com"
     duration = timedelta(minutes=11)
     place = PlaceFactory()
+
+
+class HourFactory(DjangoModelFactory):
+    class Meta:
+        model = OpeningHour
+
+    weekday = Sequence(lambda n: n)
+    opening_hour = datetime.time(8, 0, 1, 1)
+    closing_hour = datetime.time(16, 30, 0, 0)

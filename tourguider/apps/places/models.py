@@ -26,10 +26,12 @@ class OpeningHour(models.Model):
         unique_together = ('weekday', 'opening_hour', 'closing_hour')
 
     def __unicode__(self):
-        return "{}: {} - {}".format(self.get_weekday_display(), self.opening_hour, self.closing_hour)
+        return "{}: {} - {}".format(
+            self.get_weekday_display(), self.opening_hour, self.closing_hour)
 
     def __str__(self):
-        return "{}: {} - {}".format(self.get_weekday_display(), self.opening_hour, self.closing_hour)
+        return "{}: {} - {}".format(
+            self.get_weekday_display(), self.opening_hour, self.closing_hour)
 
 
 class Place(models.Model):
@@ -42,8 +44,6 @@ class Place(models.Model):
     latitude = models.CharField(max_length=20, blank=True)
     longitude = models.CharField(max_length=20, blank=True)
     cost = models.FloatField(default=0)
-    opening_time = models.TimeField(blank=True, null=True)
-    closing_time = models.TimeField(blank=True, null=True)
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(auto_now=True)
     hours = models.ManyToManyField(OpeningHour, blank=True)

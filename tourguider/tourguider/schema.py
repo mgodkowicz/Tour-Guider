@@ -6,26 +6,25 @@ from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from apps.places.schema import PlaceQuery, PlaceMutation
 from apps.trips.graph.mutations import TripMutation
 from apps.trips.graph.queries import TripQuery
 from apps.users.schema import UserMutation, UserQuery
 from apps.reviews.schema import ReviewMutation, ReviewQuery
 
 
-class PublicQuery(TripQuery, PlaceQuery, UserQuery, ReviewQuery, graphene.ObjectType):
+class PublicQuery(TripQuery,  UserQuery, ReviewQuery, graphene.ObjectType):
     # This class will inherit from multiple Queries
     # as we begin to add more apps to our project
     debug = graphene.Field(DjangoDebug, name='__debug')
 
 
-class PrivateQuery(PlaceQuery, UserQuery, graphene.ObjectType):
+class PrivateQuery(UserQuery, graphene.ObjectType):
     # This class will inherit from multiple Queries
     # as we begin to add more apps to our project
     pass
 
 
-class Mutation(PlaceMutation, TripMutation, UserMutation, ReviewMutation, graphene.ObjectType):
+class Mutation(TripMutation, UserMutation, ReviewMutation, graphene.ObjectType):
     pass
 
 public_schema = graphene.Schema(query=PublicQuery, mutation=Mutation)

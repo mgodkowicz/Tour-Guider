@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from apps.trips.api.permissions import IsAuthenticatedNotPost
+from apps.places.models import Place
 from .serializers import TripSerializer, TripDetailSerializer
 from ..models import Trip
 

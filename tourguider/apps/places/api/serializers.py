@@ -39,7 +39,17 @@ class GuideSerializer(serializers.ModelSerializer):
 
 
 class PlaceSerializer(serializers.ModelSerializer):
+  #  guides = GuideSerializer(many=True)
 
     class Meta:
         model = Place
         fields = '__all__'
+        read_only_fields = ('created',)
+
+
+class PlaceDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Place
+        fields = '__all__'
+        read_only_fields = ('created',)

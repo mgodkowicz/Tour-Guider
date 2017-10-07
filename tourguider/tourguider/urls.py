@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from graphene_django.views import GraphQLView
+from rest_framework.documentation import include_docs_urls
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
 
 from .schema import public_schema
@@ -27,8 +28,10 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^graphql/', GraphQLView.as_view(graphiql=True, schema=public_schema)),
 
-
     url(r'^api/trips/', include('apps.trips.api.urls', namespace='api-trip')),
+    url(r'^api/places/', include('apps.places.api.urls', namespace='api-place')),
 
     url(r'^api/docs/', include('rest_framework_docs.urls')),
+    url(r'^api/docs2/', include_docs_urls(title='My API title'))
+
 ]
