@@ -17,21 +17,12 @@ class OpeningHourSerializer(serializers.ModelSerializer):
         place.hours.add(hour)
         return hour
 
-    # def update(self, instance, validated_data):
-    #     instance.weekday = validated_data.get('weekday', instance.weekday)
-    #     instance.opening_hour = validated_data.get(
-    #         'opening_hour', instance.opening_hour).replace(tzinfo=None)
-    #     instance.closing_hour = validated_data.get(
-    #         'closing_hour', instance.closing_hour).replace(tzinfo=None)
-    #     instance.save()
-    #
-    #     return instance
-
 
 class GuideSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guide
         fields = '__all__'
+        read_only_fields = ('place',)
 
 
 class PlaceSerializer(serializers.ModelSerializer):

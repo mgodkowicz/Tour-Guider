@@ -3,9 +3,9 @@ from rest_framework.reverse import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
-from apps.places.api.serializers import PlaceSerializer, PlaceDetailSerializer, OpeningHourSerializer
-from apps.places.models import Place, OpeningHour
-from apps.places.tests.factories import PlaceFactory, HourFactory
+from apps.places.api.serializers import PlaceSerializer, PlaceDetailSerializer, OpeningHourSerializer, GuideSerializer
+from apps.places.models import Place, OpeningHour, Guide
+from apps.places.tests.factories import PlaceFactory, HourFactory, GuideFactory
 from apps.trips.models import Trip
 from apps.trips.tests.factories import TripFactory
 
@@ -38,7 +38,7 @@ class GetSinglePlaceTest(APITestCase):
 
     def test_get_invalid_single_place(self):
         response = self.client.get(
-            reverse('api-place:detail', kwargs={'pk': 100}))
+            reverse('api-place:detail', kwargs={'pk': 1000}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
@@ -229,3 +229,87 @@ class CreatePlaceOpeningHourTest(APITestCase):
             data=self.valid_payload
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+class GetPlaceGuidesTest(APITestCase):
+    def setUp(self):
+        self.place = PlaceFactory()
+        self.guide = GuideFactory(place=self.place)
+        self.guide_2 = GuideFactory(place=self.place)
+
+    def test_get_all_guides(self):
+        response = self.client.get(
+            reverse('api-place:guides',
+                    kwargs={'pk': self.place.id}
+                    )
+        )
+        guides = Guide.objects.filter(place=self.place)
+        serializer = GuideSerializer(guides, many=True)
+        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_guides_for_invalid_place(self):
+        response = self.client.get(
+            reverse('api-place:guides',
+                    kwargs={'pk': 100}
+                    )
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class CreateNewGuideTest(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create(username="nerd", is_staff=True)
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+        self.place = PlaceFactory()
+        self.valid_payload = {
+            'name': 'Best Place Guide',
+            'text': 'this is beautiful place',
+            'audioURL': 'http://www.link.com',
+            'duration': '00:10:00',
+            'place': self.place.id
+        }
+        self.invalid_payload = {
+            'text': 'this is wrong place',
+            'audioURL': 'www.link.com',
+            'duration': '00:10:00',
+            'place': self.place.id
+        }
+
+    def test_create_valid_guide_by_admin(self):
+        response = self.client.post(
+            reverse('api-place:guides',
+                    kwargs={'pk': self.place.id}),
+            data=self.valid_payload
+        )
+        guide = Guide.objects.get(id=response.data['id'])
+        self.assertTrue(guide.place == self.place)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_invalid_guide_by_admin(self):
+        response = self.client.post(
+            reverse('api-place:guides',
+                    kwargs={'pk': self.place.id}),
+            data=self.invalid_payload
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_valid_guide_invalid_place(self):
+        response = self.client.post(
+            reverse('api-place:guides',
+                    kwargs={'pk': 100}),
+            data=self.valid_payload
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_create_guide_by_user(self):
+        self.user.is_staff = False
+        response = self.client.post(
+            reverse('api-place:guides',
+                    kwargs={'pk': self.place.id}),
+            data=self.valid_payload
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+

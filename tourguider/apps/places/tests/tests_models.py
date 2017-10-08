@@ -11,6 +11,6 @@ class PlaceModelTest(TestCase):
         self.assertEqual(place.latitude, 51.10922092338914)
 
     def test_create_guide_model(self):
-        guide = GuideFactory()
+        guide = GuideFactory(name="Guide 000")
         self.assertEqual(guide.name, "Guide 000")
         self.assertEqual(type(guide.place), Place)

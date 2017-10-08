@@ -25,6 +25,8 @@ from .schema import public_schema
 urlpatterns = [
     url(r'^api/token-auth/', obtain_jwt_token),
     url(r'^api/token-verify/', verify_jwt_token),
+    url(r'^auth/', include('rest_framework.urls',
+                           namespace='rest_framework')),
     url(r'^admin/', admin.site.urls),
     url(r'^graphql/', GraphQLView.as_view(graphiql=True, schema=public_schema)),
 
