@@ -313,3 +313,121 @@ class CreateNewGuideTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
+class GetSinglePlaceGuideTest(APITestCase):
+    def setUp(self):
+        self.place = PlaceFactory()
+        self.guide = GuideFactory(place=self.place)
+
+    def test_get_valid_single_guide(self):
+        response = self.client.get(
+            reverse('api-place:guide-detail',
+                    kwargs={'pk': self.place.id,
+                            'guide_pk': self.guide.id}
+                    )
+        )
+        guide = Guide.objects.first()
+        serializer = GuideSerializer(guide)
+        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_invalid_place_single_guide(self):
+        response = self.client.get(
+            reverse('api-place:guide-detail',
+                    kwargs={'pk': 100,
+                            'guide_pk': self.guide.id}
+                    )
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_invalid_single_guide(self):
+        response = self.client.get(
+            reverse('api-place:guide-detail',
+                    kwargs={'pk': self.place.id,
+                            'guide_pk': 10}
+                    )
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class UpdateSingleGuideTest(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create(username="nerd", is_staff=True)
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+        self.place = PlaceFactory()
+        self.guide = GuideFactory(place=self.place)
+        self.valid_payload = {
+            'name': 'Best Place Guide',
+            'text': 'this is beautiful place',
+            'audioURL': 'http://www.link.com',
+            'duration': '00:10:00',
+            'place': self.place.id
+        }
+        self.invalid_payload = {
+            'text': 'this is wrong place',
+            'audioURL': 'www.link.com',
+            'duration': '00:10:00',
+            'place': self.place.id
+        }
+
+    def test_valid_update_guide(self):
+        response = self.client.put(
+            reverse('api-place:guide-detail',
+                    kwargs={'pk': self.place.id,
+                            'guide_pk': self.guide.id}),
+            data=self.valid_payload
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_invalid_update_guide(self):
+        response = self.client.put(
+            reverse('api-place:guide-detail',
+                    kwargs={'pk': self.place.id,
+                            'guide_pk': self.guide.id}),
+            data=self.invalid_payload
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_regular_user_cant_update_guide(self):
+        self.user.is_staff = False
+        response = self.client.put(
+            reverse('api-place:guide-detail',
+                    kwargs={'pk': self.place.id,
+                            'guide_pk': self.guide.id}),
+            data=self.valid_payload
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+class DeleteSingleGuideTest(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create(username="nerd", is_staff=True)
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+        self.place = PlaceFactory()
+        self.guide = GuideFactory(place=self.place)
+
+    def test_valid_delete_guide(self):
+        response = self.client.delete(
+            reverse('api-place:guide-detail',
+                    kwargs={'pk': self.place.id,
+                            'guide_pk': self.guide.id})
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_invalid_delete_guide(self):
+        response = self.client.delete(
+            reverse('api-place:guide-detail',
+                    kwargs={'pk': 100,
+                            'guide_pk': self.guide.id})
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_regular_user_cant_delete_guide(self):
+        self.user.is_staff = False
+        response = self.client.delete(
+            reverse('api-place:guide-detail',
+                    kwargs={'pk': self.place.id,
+                            'guide_pk': self.guide.id})
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

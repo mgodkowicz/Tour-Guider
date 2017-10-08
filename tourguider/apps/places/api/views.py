@@ -1,4 +1,5 @@
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
@@ -48,18 +49,22 @@ class PlaceGuidesAPIView(generics.ListCreateAPIView):
     permission_classes = (IsAdminOrReadOnly,)
 
     def get_queryset(self):
-        try:
-            place = Place.objects.get(id=self.kwargs['pk'])
-            guides = Guide.objects.filter(place=place)
-        except:
-            raise Http404
+        place = get_object_or_404(Place, id=self.kwargs['pk'])
+        guides = Guide.objects.filter(place=place)
         return guides
 
     def perform_create(self, serializer):
-        try:
-            place = Place.objects.get(id=self.kwargs['pk'])
-        except:
-            raise Http404
+        place = get_object_or_404(Place, id=self.kwargs['pk'])
         serializer.save(
             place=place
         )
+
+
+class PlaceGuideDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = GuideSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+
+    def get_object(self):
+        guide = get_object_or_404(
+            Guide, id=self.kwargs['guide_pk'], place=self.kwargs['pk'])
+        return guide
