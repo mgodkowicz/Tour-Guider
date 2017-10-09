@@ -22,6 +22,11 @@ class PlaceDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class PlaceOpeningHoursAPIView(generics.ListCreateAPIView):
+    """
+    post:
+        if place doesn't have specific weekday opening hour
+        create new instance otherwise update old one
+    """
     serializer_class = OpeningHourSerializer
     permission_classes = (IsAdminOrReadOnly,)
 

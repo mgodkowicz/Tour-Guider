@@ -46,7 +46,7 @@ PREREQ_APPS = [
 PROJECT_APPS = [
     'apps.places',
     'apps.trips',
-    'apps.users',
+    'apps.accounts',
     'apps.reviews'
 ]
 

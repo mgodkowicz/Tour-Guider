@@ -8,7 +8,7 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from apps.trips.graph.mutations import TripMutation
 from apps.trips.graph.queries import TripQuery
-from apps.users.schema import UserMutation, UserQuery
+from apps.accounts.schema import UserMutation, UserQuery
 from apps.reviews.schema import ReviewMutation, ReviewQuery
 
 

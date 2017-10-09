@@ -17,16 +17,15 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from graphene_django.views import GraphQLView
 from rest_framework.documentation import include_docs_urls
-from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
 
 from .schema import public_schema
 
 
 urlpatterns = [
-    url(r'^api/token-auth/', obtain_jwt_token),
-    url(r'^api/token-verify/', verify_jwt_token),
+
     url(r'^auth/', include('rest_framework.urls',
                            namespace='rest_framework')),
+    url(r'^api/accounts/', include('apps.accounts.api.urls', namespace='api-accounts')),
     url(r'^admin/', admin.site.urls),
     url(r'^graphql/', GraphQLView.as_view(graphiql=True, schema=public_schema)),
 
