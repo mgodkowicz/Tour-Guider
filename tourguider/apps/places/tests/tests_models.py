@@ -1,7 +1,7 @@
 from django.test import TestCase
 
-from .factories import PlaceFactory, GuideFactory
-from ..models import Place
+from .factories import PlaceFactory, GuideFactory, HourFactory
+from ..models import Place, OpeningHour
 
 
 class PlaceModelTest(TestCase):
@@ -14,3 +14,7 @@ class PlaceModelTest(TestCase):
         guide = GuideFactory(name="Guide 000")
         self.assertEqual(guide.name, "Guide 000")
         self.assertEqual(type(guide.place), Place)
+
+    def test_create_hour_model(self):
+        hour = HourFactory()
+        self.assertEqual(type(hour), OpeningHour)

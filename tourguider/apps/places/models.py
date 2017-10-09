@@ -1,6 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.utils import timezone
+from django.utils.timezone import now, localtime, datetime
 
 from apps.reviews.models import Review
 
@@ -23,7 +23,6 @@ class OpeningHour(models.Model):
 
     class Meta:
         ordering = ('weekday', 'opening_hour')
-        unique_together = ('weekday', 'opening_hour', 'closing_hour')
 
     def __unicode__(self):
         return "{}: {} - {}".format(
@@ -44,15 +43,15 @@ class Place(models.Model):
     latitude = models.CharField(max_length=20, blank=True)
     longitude = models.CharField(max_length=20, blank=True)
     cost = models.FloatField(default=0)
-    created = models.DateTimeField(default=timezone.now)
+    created = models.DateTimeField(default=now)
     updated = models.DateTimeField(auto_now=True)
     hours = models.ManyToManyField(OpeningHour, blank=True)
 
     def __unicode__(self):
-        return self.name
+        return f'{self.id}. {self.name}'
 
     def __str__(self):
-        return self.name
+        return f'{self.id}. {self.name}'
 
     @property
     def rate(self):
@@ -61,6 +60,13 @@ class Place(models.Model):
         if len(reviews):
             return sum(review.rate for review in reviews) / len(reviews)
         return 0
+
+    @property
+    def is_open(self):
+        for hour in self.hours.all():
+            if hour.weekday == datetime.today().weekday() + 1:
+                return hour.opening_hour < localtime(now()).time() < hour.closing_hour
+        return False
 
     class Meta:
         verbose_name = 'Place'

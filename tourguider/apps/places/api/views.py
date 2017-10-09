@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from apps.places.api.serializers import PlaceSerializer, OpeningHourSerializer, GuideSerializer
+from apps.places.api.serializers import PlaceSerializer, OpeningHourSerializer, GuideSerializer, PlaceDetailSerializer
 from apps.places.models import Place, OpeningHour, Guide
 from apps.trips.api.permissions import IsAdminOrReadOnly
 from apps.trips.models import Trip
@@ -16,7 +16,7 @@ class PlaceListAPIView(generics.ListCreateAPIView):
 
 
 class PlaceDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = PlaceSerializer
+    serializer_class = PlaceDetailSerializer
     queryset = Place.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
 
@@ -26,7 +26,7 @@ class PlaceOpeningHoursAPIView(generics.ListCreateAPIView):
     permission_classes = (IsAdminOrReadOnly,)
 
     def get_queryset(self):
-        place = Place.objects.get(id=self.kwargs['pk'])
+        place = get_object_or_404(Place, id=self.kwargs['pk'])
         return place.hours
 
     def perform_create(self, serializer):

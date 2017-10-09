@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.models import User
 from rest_framework.reverse import reverse
 from rest_framework import status
@@ -200,8 +202,12 @@ class CreatePlaceOpeningHourTest(APITestCase):
             'closing_hour': '16:30:00'
         }
         self.invalid_payload = {
-            'weekday': 2,
             'closing_hour': '16:30:00'
+        }
+        self.valid_updated_payload = {
+            'weekday': 1,
+            'opening_hour': '08:00:00',
+            'closing_hour': '16:00:00'
         }
 
     def test_create_valid_hour_by_admin(self):
@@ -229,6 +235,26 @@ class CreatePlaceOpeningHourTest(APITestCase):
             data=self.valid_payload
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_create_same_valid_hour(self):
+        response = self.client.post(
+            reverse('api-place:hours', kwargs={'pk': self.place.id}),
+            data=self.valid_payload
+        )
+        hour = OpeningHour.objects.get(id=response.data['id'])
+        self.assertEqual(hour.id, 1)
+
+    def test_create_second_monday_hour(self):
+        """When creating hour for existing day, object should update himself"""
+        response = self.client.post(
+            reverse('api-place:hours', kwargs={'pk': self.place.id}),
+            data=self.valid_updated_payload
+        )
+        hour = OpeningHour.objects.get(id=response.data['id'])
+        self.assertEqual(hour.id, 1)
+        self.assertEqual(hour.opening_hour, datetime.time(8, 0))
+        self.assertEqual(OpeningHour.objects.all().count(), 1)
+        self.assertEqual(self.place.hours.first(), hour)
 
 
 class GetPlaceGuidesTest(APITestCase):

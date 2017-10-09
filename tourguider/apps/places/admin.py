@@ -5,7 +5,7 @@ from .models import Place, Guide, OpeningHour
 
 
 class PlaceAdmin(admin.ModelAdmin):
-    readonly_fields = ('rate',)
+    readonly_fields = ('rate', 'is_open')
 
     class Meta:
         model = Place
