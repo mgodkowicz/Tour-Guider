@@ -19,6 +19,7 @@ class PlaceDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PlaceDetailSerializer
     queryset = Place.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
+    lookup_url_kwarg = 'place_pk'
 
 
 class PlaceOpeningHoursAPIView(generics.ListCreateAPIView):
@@ -31,12 +32,12 @@ class PlaceOpeningHoursAPIView(generics.ListCreateAPIView):
     permission_classes = (IsAdminOrReadOnly,)
 
     def get_queryset(self):
-        place = get_object_or_404(Place, id=self.kwargs['pk'])
+        place = get_object_or_404(Place, id=self.kwargs['place_pk'])
         return place.hours
 
     def perform_create(self, serializer):
         serializer.save(
-            place=self.kwargs['pk']
+            place=self.kwargs['place_pk']
         )
 
 
@@ -54,12 +55,12 @@ class PlaceGuidesAPIView(generics.ListCreateAPIView):
     permission_classes = (IsAdminOrReadOnly,)
 
     def get_queryset(self):
-        place = get_object_or_404(Place, id=self.kwargs['pk'])
+        place = get_object_or_404(Place, id=self.kwargs['place_pk'])
         guides = Guide.objects.filter(place=place)
         return guides
 
     def perform_create(self, serializer):
-        place = get_object_or_404(Place, id=self.kwargs['pk'])
+        place = get_object_or_404(Place, id=self.kwargs['place_pk'])
         serializer.save(
             place=place
         )
@@ -68,8 +69,9 @@ class PlaceGuidesAPIView(generics.ListCreateAPIView):
 class PlaceGuideDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = GuideSerializer
     permission_classes = (IsAdminOrReadOnly,)
+    lookup_url_kwarg = 'place_pk'
 
     def get_object(self):
         guide = get_object_or_404(
-            Guide, id=self.kwargs['guide_pk'], place=self.kwargs['pk'])
+            Guide, id=self.kwargs['guide_pk'], place=self.kwargs['place_pk'])
         return guide

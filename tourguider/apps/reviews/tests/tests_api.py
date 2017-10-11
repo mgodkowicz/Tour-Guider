@@ -52,7 +52,7 @@ class GetAllPlaceReviewsTest(APITestCase):
 
     def test_get_all_reviews(self):
         response = self.client.get(reverse('api-place:reviews',
-                                   kwargs={'pk': self.place.id}))
+                                   kwargs={'place_pk': self.place.id}))
         reviews = Review.objects.filter(content_type=self.ct,
                                         object_id=self.place.id)
         serializer = ReviewSerializer(reviews, many=True)
@@ -61,7 +61,7 @@ class GetAllPlaceReviewsTest(APITestCase):
 
     def test_get_empty_reviews_list(self):
         response = self.client.get(reverse('api-place:reviews',
-                                   kwargs={'pk': self.place2.id}))
+                                   kwargs={'place_pk': self.place2.id}))
         reviews = Review.objects.filter(content_type=self.ct,
                                         object_id=self.place2.id)
         serializer = ReviewSerializer(reviews, many=True)

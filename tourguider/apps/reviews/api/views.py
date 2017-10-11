@@ -19,7 +19,10 @@ class ReviewListAPIView(ListCreateAPIView):
         return Review.objects.filter(object_id=instance.id, content_type=ct)
 
     def object_type(self):
-        arg = self.kwargs.get('trip_pk', False)
-        if arg:
-            return arg, Trip
-        return self.kwargs.get('pk'), Place
+        object_type = self.kwargs['type']
+        types = {
+            'trip': Trip,
+            'place': Place
+        }
+        pk = f"{object_type}_pk"
+        return self.kwargs.get(pk), types[object_type]

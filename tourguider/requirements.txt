@@ -4,6 +4,7 @@ click==6.7
 coreapi==2.3.3
 coreschema==0.0.4
 Django==1.11.5
+django-cors-headers==2.1.0
 django-filter==1.0.4
 django-rest-swagger==2.1.2
 djangorestframework==3.6.4
@@ -13,7 +14,7 @@ factory-boy==2.9.2
 Faker==0.8.4
 graphene==2.0.dev20170802065539
 graphene-django==2.0.dev2017083101
-graphene-django-extras==0.0.1b10
+graphene-django-extras==0.0.2
 graphql-core==2.0.dev20170801051721
 graphql-relay==0.4.5
 idna==2.6

@@ -30,18 +30,21 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-PREREQ_APPS = [
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'graphene_django',
-    'rest_framework',
-    'rest_framework_docs'
+    'django.contrib.staticfiles'
 ]
 
+THIRD_PART_APPS = [
+    'graphene_django',
+    'rest_framework',
+    'rest_framework_docs',
+    'corsheaders'
+]
 
 PROJECT_APPS = [
     'apps.places',
@@ -50,13 +53,14 @@ PROJECT_APPS = [
     'apps.reviews'
 ]
 
-INSTALLED_APPS = PREREQ_APPS + PROJECT_APPS
+INSTALLED_APPS = DJANGO_APPS + THIRD_PART_APPS + PROJECT_APPS
 
 TEST_RUNNER = 'snapshottest.django.TestRunner'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -103,6 +107,8 @@ REST_FRAMEWORK = {
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=300),
 }
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 WSGI_APPLICATION = 'tourguider.wsgi.application'
 

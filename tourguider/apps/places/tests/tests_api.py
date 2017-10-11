@@ -32,7 +32,7 @@ class GetSinglePlaceTest(APITestCase):
 
     def test_get_valid_single_place(self):
         response = self.client.get(
-            reverse('api-place:detail', kwargs={'pk': self.place.id}))
+            reverse('api-place:detail', kwargs={'place_pk': self.place.id}))
         trip = Place.objects.first()
         serializer = PlaceDetailSerializer(trip)
         self.assertEqual(response.data, serializer.data)
@@ -40,7 +40,7 @@ class GetSinglePlaceTest(APITestCase):
 
     def test_get_invalid_single_place(self):
         response = self.client.get(
-            reverse('api-place:detail', kwargs={'pk': 1000}))
+            reverse('api-place:detail', kwargs={'place_pk': 1000}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
@@ -106,7 +106,7 @@ class UpdateSinglePlaceTest(APITestCase):
     def test_valid_update_place(self):
         self.user.is_staff = True
         response = self.client.put(
-            reverse('api-place:detail', kwargs={'pk': 1}),
+            reverse('api-place:detail', kwargs={'place_pk': 1}),
             data=self.valid_payload
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -114,7 +114,7 @@ class UpdateSinglePlaceTest(APITestCase):
     def test_invalid_update_place(self):
         self.user.is_staff = True
         response = self.client.put(
-            reverse('api-place:detail', kwargs={'pk': 1}),
+            reverse('api-place:detail', kwargs={'place_pk': 1}),
             data=self.invalid_payload
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -122,7 +122,7 @@ class UpdateSinglePlaceTest(APITestCase):
     def test_regular_user_cant_update_place(self):
         self.user.is_staff = False
         response = self.client.put(
-            reverse('api-place:detail', kwargs={'pk': 1}),
+            reverse('api-place:detail', kwargs={'place_pk': 1}),
             data=self.valid_payload
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -138,20 +138,20 @@ class DeleteSinglePlaceTest(APITestCase):
 
     def test_valid_delete_place(self):
         response = self.client.delete(
-            reverse('api-place:detail', kwargs={'pk': self.place_2.id}),
+            reverse('api-place:detail', kwargs={'place_pk': self.place_2.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_invalid_delete_place(self):
         response = self.client.delete(
-            reverse('api-place:detail', kwargs={'pk': 100}),
+            reverse('api-place:detail', kwargs={'place_pk': 100}),
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_regular_user_cant_delete_place(self):
         self.user.is_staff = False
         response = self.client.delete(
-            reverse('api-place:detail', kwargs={'pk': self.place_2.id}),
+            reverse('api-place:detail', kwargs={'place_pk': self.place_2.id}),
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -181,7 +181,7 @@ class GetPlaceOpeningHoursTest(APITestCase):
 
     def test_get_all_hours(self):
         response = self.client.get(
-            reverse('api-place:hours', kwargs={'pk': self.place.id})
+            reverse('api-place:hours', kwargs={'place_pk': self.place.id})
         )
         hours = OpeningHour.objects.all()
         serializer = OpeningHourSerializer(hours, many=True)
@@ -213,7 +213,7 @@ class CreatePlaceOpeningHourTest(APITestCase):
     def test_create_valid_hour_by_admin(self):
         self.user.is_staff = True
         response = self.client.post(
-            reverse('api-place:hours', kwargs={'pk': self.place.id}),
+            reverse('api-place:hours', kwargs={'place_pk': self.place.id}),
             data=self.valid_payload
         )
         hour = OpeningHour.objects.get(id=response.data['id'])
@@ -222,7 +222,7 @@ class CreatePlaceOpeningHourTest(APITestCase):
 
     def test_create_invalid_hour_by_admin(self):
         response = self.client.post(
-            reverse('api-place:hours', kwargs={'pk': self.place.id}),
+            reverse('api-place:hours', kwargs={'place_pk': self.place.id}),
             data=self.invalid_payload
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -231,14 +231,14 @@ class CreatePlaceOpeningHourTest(APITestCase):
         """Regular user can not create hours"""
         self.user.is_staff = False
         response = self.client.post(
-            reverse('api-place:hours', kwargs={'pk': self.place.id}),
+            reverse('api-place:hours', kwargs={'place_pk': self.place.id}),
             data=self.valid_payload
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_create_same_valid_hour(self):
         response = self.client.post(
-            reverse('api-place:hours', kwargs={'pk': self.place.id}),
+            reverse('api-place:hours', kwargs={'place_pk': self.place.id}),
             data=self.valid_payload
         )
         hour = OpeningHour.objects.get(id=response.data['id'])
@@ -247,7 +247,7 @@ class CreatePlaceOpeningHourTest(APITestCase):
     def test_create_second_monday_hour(self):
         """When creating hour for existing day, object should update himself"""
         response = self.client.post(
-            reverse('api-place:hours', kwargs={'pk': self.place.id}),
+            reverse('api-place:hours', kwargs={'place_pk': self.place.id}),
             data=self.valid_updated_payload
         )
         hour = OpeningHour.objects.get(id=response.data['id'])
@@ -266,7 +266,7 @@ class GetPlaceGuidesTest(APITestCase):
     def test_get_all_guides(self):
         response = self.client.get(
             reverse('api-place:guides',
-                    kwargs={'pk': self.place.id}
+                    kwargs={'place_pk': self.place.id}
                     )
         )
         guides = Guide.objects.filter(place=self.place)
@@ -277,7 +277,7 @@ class GetPlaceGuidesTest(APITestCase):
     def test_get_guides_for_invalid_place(self):
         response = self.client.get(
             reverse('api-place:guides',
-                    kwargs={'pk': 100}
+                    kwargs={'place_pk': 100}
                     )
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -306,7 +306,7 @@ class CreateNewGuideTest(APITestCase):
     def test_create_valid_guide_by_admin(self):
         response = self.client.post(
             reverse('api-place:guides',
-                    kwargs={'pk': self.place.id}),
+                    kwargs={'place_pk': self.place.id}),
             data=self.valid_payload
         )
         guide = Guide.objects.get(id=response.data['id'])
@@ -316,7 +316,7 @@ class CreateNewGuideTest(APITestCase):
     def test_create_invalid_guide_by_admin(self):
         response = self.client.post(
             reverse('api-place:guides',
-                    kwargs={'pk': self.place.id}),
+                    kwargs={'place_pk': self.place.id}),
             data=self.invalid_payload
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -324,7 +324,7 @@ class CreateNewGuideTest(APITestCase):
     def test_create_valid_guide_invalid_place(self):
         response = self.client.post(
             reverse('api-place:guides',
-                    kwargs={'pk': 100}),
+                    kwargs={'place_pk': 100}),
             data=self.valid_payload
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -333,7 +333,7 @@ class CreateNewGuideTest(APITestCase):
         self.user.is_staff = False
         response = self.client.post(
             reverse('api-place:guides',
-                    kwargs={'pk': self.place.id}),
+                    kwargs={'place_pk': self.place.id}),
             data=self.valid_payload
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -347,7 +347,7 @@ class GetSinglePlaceGuideTest(APITestCase):
     def test_get_valid_single_guide(self):
         response = self.client.get(
             reverse('api-place:guide-detail',
-                    kwargs={'pk': self.place.id,
+                    kwargs={'place_pk': self.place.id,
                             'guide_pk': self.guide.id}
                     )
         )
@@ -359,7 +359,7 @@ class GetSinglePlaceGuideTest(APITestCase):
     def test_get_invalid_place_single_guide(self):
         response = self.client.get(
             reverse('api-place:guide-detail',
-                    kwargs={'pk': 100,
+                    kwargs={'place_pk': 100,
                             'guide_pk': self.guide.id}
                     )
         )
@@ -368,7 +368,7 @@ class GetSinglePlaceGuideTest(APITestCase):
     def test_get_invalid_single_guide(self):
         response = self.client.get(
             reverse('api-place:guide-detail',
-                    kwargs={'pk': self.place.id,
+                    kwargs={'place_pk': self.place.id,
                             'guide_pk': 10}
                     )
         )
@@ -399,7 +399,7 @@ class UpdateSingleGuideTest(APITestCase):
     def test_valid_update_guide(self):
         response = self.client.put(
             reverse('api-place:guide-detail',
-                    kwargs={'pk': self.place.id,
+                    kwargs={'place_pk': self.place.id,
                             'guide_pk': self.guide.id}),
             data=self.valid_payload
         )
@@ -408,7 +408,7 @@ class UpdateSingleGuideTest(APITestCase):
     def test_invalid_update_guide(self):
         response = self.client.put(
             reverse('api-place:guide-detail',
-                    kwargs={'pk': self.place.id,
+                    kwargs={'place_pk': self.place.id,
                             'guide_pk': self.guide.id}),
             data=self.invalid_payload
         )
@@ -418,7 +418,7 @@ class UpdateSingleGuideTest(APITestCase):
         self.user.is_staff = False
         response = self.client.put(
             reverse('api-place:guide-detail',
-                    kwargs={'pk': self.place.id,
+                    kwargs={'place_pk': self.place.id,
                             'guide_pk': self.guide.id}),
             data=self.valid_payload
         )
@@ -436,7 +436,7 @@ class DeleteSingleGuideTest(APITestCase):
     def test_valid_delete_guide(self):
         response = self.client.delete(
             reverse('api-place:guide-detail',
-                    kwargs={'pk': self.place.id,
+                    kwargs={'place_pk': self.place.id,
                             'guide_pk': self.guide.id})
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
@@ -444,7 +444,7 @@ class DeleteSingleGuideTest(APITestCase):
     def test_invalid_delete_guide(self):
         response = self.client.delete(
             reverse('api-place:guide-detail',
-                    kwargs={'pk': 100,
+                    kwargs={'place_pk': 100,
                             'guide_pk': self.guide.id})
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -453,7 +453,7 @@ class DeleteSingleGuideTest(APITestCase):
         self.user.is_staff = False
         response = self.client.delete(
             reverse('api-place:guide-detail',
-                    kwargs={'pk': self.place.id,
+                    kwargs={'place_pk': self.place.id,
                             'guide_pk': self.guide.id})
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
